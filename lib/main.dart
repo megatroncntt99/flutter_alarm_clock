@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_alarm_clock/models/MenuInfo.dart';
+import 'package:flutter_alarm_clock/models/MenuType.dart';
+import 'package:provider/provider.dart';
 
 import 'screen/home_screen.dart';
 
@@ -17,7 +20,12 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         fontFamily: "avenir",
       ),
-      home: HomeScreen(),
+      home: ChangeNotifierProvider<MenuInfo>(
+        create: (context) => MenuInfo(menuType: MenuType.Clock),
+        builder: (context, child) {
+          return HomeScreen();
+        },
+      ),
     );
   }
 }
