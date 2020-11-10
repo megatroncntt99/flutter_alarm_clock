@@ -2,7 +2,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alarm_clock/models/AlarmInfo.dart';
 import 'package:flutter_alarm_clock/theme_data.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import '../../main.dart';
 import 'components/alarm_card.dart';
 
 class AlarmScreen extends StatelessWidget {
@@ -53,7 +55,9 @@ class AlarmScreen extends StatelessWidget {
                       highlightColor: CustomColors.menuBackgroundColor,
                       padding:
                           EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                      onPressed: () {},
+                      onPressed: () {
+                        scheduleAlarm(DateTime.now());
+                      },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -79,6 +83,38 @@ class AlarmScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void scheduleAlarm(DateTime scheduledNotificationDateTime) async {
+    print("van");
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'alarm_notif',
+      'alarm_notif',
+      'Channel for Alarm notification',
+      icon: 'clock',
+      sound: RawResourceAndroidNotificationSound('a_long_cold_sting'),
+      largeIcon: DrawableResourceAndroidBitmap('clock'),
+    );
+
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+        sound: 'a_long_cold_sting.wav',
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true);
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+      1,
+      'Office',
+      'Good morning! Time for office.',
+      scheduledNotificationDateTime,
+      platformChannelSpecifics,
+      androidAllowWhileIdle: true,
+
+      // uiLocalNotificationDateInterpretation:
+      //     UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 }
