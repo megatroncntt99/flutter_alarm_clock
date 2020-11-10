@@ -16,15 +16,21 @@ class ClockScreen extends StatefulWidget {
 
 class _ClockScreenState extends State<ClockScreen> {
   DateTime _dateTime = DateTime.now();
+  Timer _clockTimer;
   @override
   void initState() {
-    super.initState();
-
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    _clockTimer = new Timer.periodic(Duration(seconds: 1), (timer) {
       this.setState(() {
         _dateTime = DateTime.now();
       });
     });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _clockTimer.cancel();
+    super.dispose();
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:flutter_alarm_clock/models/MenuInfo.dart';
 import 'package:flutter_alarm_clock/models/MenuType.dart';
 import 'package:provider/provider.dart';
 
+import 'alarm/alarm_screen.dart';
 import 'clock/clock_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,19 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     break;
 
                   case MenuType.Alarm:
-                    return Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Alarm",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    return AlarmScreen();
                     break;
                   case MenuType.Timer:
                     return Container(
