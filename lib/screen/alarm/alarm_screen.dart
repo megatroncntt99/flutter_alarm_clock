@@ -87,7 +87,6 @@ class AlarmScreen extends StatelessWidget {
   }
 
   void scheduleAlarm(DateTime scheduledNotificationDateTime) async {
-    print("van");
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
       'alarm_notif',
