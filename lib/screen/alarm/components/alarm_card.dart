@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_alarm_clock/database/AlarmHelper.dart';
 import 'package:flutter_alarm_clock/models/AlarmInfo.dart';
 import 'package:intl/intl.dart';
+
+import '../../../theme_data.dart';
 
 class AlarmCard extends StatelessWidget {
   const AlarmCard({
     Key key,
     @required this.alarmInfo,
+    @required this.deleteAlarm,
+    @required this.changerActive,
   }) : super(key: key);
   final AlarmInfo alarmInfo;
+  final Function(bool) changerActive;
+  final Function deleteAlarm;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +23,8 @@ class AlarmCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: alarmInfo.colorGradient,
+            colors: GradientTemplate
+                .gradientTemplate[alarmInfo.gradientColorIndex].colors,
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
@@ -24,7 +32,9 @@ class AlarmCard extends StatelessWidget {
           boxShadow: [
             BoxShadow(
                 offset: Offset(3, 3),
-                color: alarmInfo.colorGradient.last.withOpacity(0.4),
+                color: GradientTemplate
+                    .gradientTemplate[alarmInfo.gradientColorIndex].colors.last
+                    .withOpacity(0.4),
                 blurRadius: 8,
                 spreadRadius: 2)
           ]),
@@ -42,16 +52,12 @@ class AlarmCard extends StatelessWidget {
                 width: 8,
               ),
               Text(
-                alarmInfo.description,
+                alarmInfo.title,
                 style: TextStyle(color: Colors.white),
               ),
-              Spacer(),
               Switch(
-                value: alarmInfo.isActive,
-                onChanged: (value) {
-                  alarmInfo.isActive = value;
-                  print(value);
-                },
+                value: alarmInfo.isActive ?? false,
+                onChanged: changerActive,
                 activeColor: Colors.white,
               ),
             ],
@@ -63,7 +69,7 @@ class AlarmCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                DateFormat("HH:mm").format(alarmInfo.dateTime),
+                DateFormat("HH:mm aa").format(alarmInfo.alarmDateTime),
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -71,9 +77,12 @@ class AlarmCard extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.white,
+              IconButton(
+                icon: Icon(
+                  Icons.delete_forever,
+                  color: Colors.white,
+                ),
+                onPressed: deleteAlarm,
               )
             ],
           )
